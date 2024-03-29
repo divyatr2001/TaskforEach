@@ -1,1 +1,65 @@
+import { LightningElement } from 'lwc';
 
+export default class YourComponent extends LightningElement {
+    calendar = [];
+
+    connectedCallback() {
+        const daysInMonth = 31;
+        const firstDayOfMonth = 5; // March 1st is on Friday (0 is Sunday, 1 is Monday, ..., 6 is Saturday)
+
+        let currentDay = 1;
+        let currentWeek = [];
+
+        // Populate calendar array with days of the month
+        for (let i = 0; i < 6; i++) { // There will be at most 6 rows in the calendar
+            currentWeek = [];
+            for (let j = 0; j < 7; j++) { // 7 days in a week
+                if (i === 0 && j < firstDayOfMonth) {
+                    // Fill empty cells before the start of the month
+                    currentWeek.push({
+                        id: 'empty' + j,
+                        date: ''
+                    });
+                } else if (currentDay <= daysInMonth) {
+                    // Populate with the dates of the month
+                    if (currentDay === 8) {
+                        currentWeek.push({
+                            id: currentDay,
+                            date: currentDay,
+                            event: 'MAHA SHIVRATRI' // Add the event 'Maha Shivratri' for 8th March
+                        });
+                    } else if (currentDay === 25) {
+                        currentWeek.push({
+                            id: currentDay,
+                            date: currentDay,
+                            event: 'HOLI' // Add the event 'Holi' for 25th March
+                        });
+                    } else if (currentDay === 29) {
+                        currentWeek.push({
+                            id: currentDay,
+                            date: currentDay,
+                            event: 'GOOD FRIDAY' // Add the event 'Good Friday' for 29th March
+                        });
+                    } else {
+                        currentWeek.push({
+                            id: currentDay,
+                            date: currentDay
+                        });
+                    }
+                    currentDay++;
+                } else {
+                    // Fill empty cells after the end of the month
+                    currentWeek.push({
+                        id: 'empty' + j,
+                        date: ''
+                    });
+                }
+            }
+            this.calendar.push(currentWeek);
+            // Stop loop if we have passed the last day of the month
+            if (currentDay > daysInMonth) {
+                break;
+            }
+        }
+    }
+}
